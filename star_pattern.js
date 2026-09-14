@@ -8,6 +8,7 @@ function printSquare() {
   }
 }
 printSquare();
+console.log("\n");
 function printTriangle() {
   for (let i = 0; i <= 4; i++) {
     let row = "";
@@ -18,6 +19,7 @@ function printTriangle() {
   }
 }
 printTriangle();
+console.log("\n");
 function printInvertedTriangle() {
   for (let i = 5; i >= 0; i--) {
     let row = "";
@@ -28,3 +30,4 @@ function printInvertedTriangle() {
   }
 }
 printInvertedTriangle();
+console.log("\n");
