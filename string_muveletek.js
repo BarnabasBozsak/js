@@ -32,3 +32,11 @@ function mindenMasodikNagybetu(text) {
   return result;
 }
 console.log(mindenMasodikNagybetu(text));
+function kisENagyE(text) {
+  return text.replace("e", "E");
+}
+console.log(kisENagyE(text));
+function tombEvel(text) {
+  return text.split("e");
+}
+console.log(tombEvel(text));
