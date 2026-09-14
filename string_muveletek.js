@@ -31,7 +31,7 @@ function mindenMasodikNagybetu(text) {
 }
 console.log(mindenMasodikNagybetu(text));
 function kisENagyE(text) {
-  return text.replace("e", "E");
+  return text.replaceAll("e", "E");
 }
 console.log(kisENagyE(text));
 function tombEvel(text) {
