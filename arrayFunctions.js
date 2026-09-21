@@ -16,6 +16,7 @@ function getSortedArray(tomb) {
 }
 let szamok = [34, 12, 23, 67, 78];
 let tippek = [34, 45, 67, 78, 10];
+
 function getTalalatok(szamok, tippek) {
   let db = 0;
   szamok.toSorted();
@@ -28,3 +29,40 @@ function getTalalatok(szamok, tippek) {
   return db;
 }
 console.log(getTalalatok(szamok, tippek));
+function getHaviLottoszamok() {
+  let havi = [];
+  for (let i = 0; i < 4; i++) {
+    havi[i] = getOtoslottoSzamok();
+  }
+  return havi;
+}
+console.log(getHaviLottoszamok());
+let havi = getHaviLottoszamok();
+function getHaviKihuzottSzamok(havi) {
+  let szamok = [];
+  for(let x of havi)
+  {
+   for(let arr of x)
+   {
+    if(!szamok.includes(arr))
+    {
+        szamok.push(arr);
+    }
+   }
+  }
+  return szamok;
+}
+function getiHaviStatisztika(szamok)
+{
+    szamok = [];
+    getHaviLottoszamok().forEach( i => 
+        {
+        if(!szamok.includes(i))
+        {
+            szamok.push(i);
+        }
+    }
+    );
+    return szamok.sort();
+}
+
