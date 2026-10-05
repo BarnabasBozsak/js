@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Grade Tracker</title>
+    <!-- FontAwesome Icons for visual affordances -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ==========================================================================
+           REGULAR CSS STYLESHEET (VARIABLES, RESET, LAYOUT & COMPONENTS)
+           ========================================================================== */
+        
+        :root {
+            --color-primary: #3b82f6;
+            --color-primary-hover: #2563eb;
+            --color-primary-light: #eff6ff;
+            --color-surface: #ffffff;
+            --color-background: #f8fafc;
+            --color-border: #e2e8f0;
+            --color-text: #1e293b;
+            --color-text-muted: #64748b;
+            --color-text-light: #94a3b8;
+            
+            --color-success: #10b981;
+            --color-success-bg: #ecfdf5;
+            --color-warning: #f59e0b;
+            --color-danger: #ef4444;
+            --color-danger-bg: #fef2f2;
+            
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            
+            --transition-fast: 0.15s ease;
+            --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        /* Reset & Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--color-background);
+            color: var(--color-text);
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header & Navigation */
+        .app-header {
+            background-color: var(--color-surface);
+            border-bottom: 1px solid var(--color-border);
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-section {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .brand-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            background-color: var(--color-primary);
+            color: white;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.25);
+        }
+
+        .brand-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+
+        .brand-subtitle {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            font-weight: 500;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-primary-hover);
+        }
+
+        .btn-secondary {
+            background-color: var(--color-surface);
+            border-color: var(--color-border);
+            color: var(--color-text-muted);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--color-background);
+            color: var(--color-text);
+        }
+
+        .btn-danger-outline {
+            background-color: var(--color-danger-bg);
+            border-color: #fca5a5;
+            color: var(--color-danger);
+        }
+
+        .btn-danger-outline:hover {
+            background-color: #fee2e2;
+        }
+
+        .btn-icon-only {
+            padding: 0.5rem;
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: var(--radius-md);
+        }
+
+        /* Main Layout */
+        .main-container {
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            flex: 1;
+        }
+
+        /* Stats Dashboard Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--color-text-muted);
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-value {
+            font-size: 1.875rem;
+            font-weight: 800;
+            color: var(--color-text);
+        }
+
+        .stat-icon-wrapper {
+            width: 3rem;
+            height: 3rem;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .stat-icon-blue { background-color: #eff6ff; color: #3b82f6; }
+        .stat-icon-indigo { background-color: #e0e7ff; color: #6366f1; }
+        .stat-icon-emerald { background-color: #d1fae5; color: #10b981; }
+
+        /* Data Table Section */
+        .table-wrapper {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .student-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.875rem;
+        }
+
+        .student-table th {
+            background-color: #f8fafc;
+            border-bottom: 1px solid var(--color-border);
+            padding: 0.875rem 1rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--color-text-muted);
+            font-weight: 600;
+        }
+
+        .student-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--color-border);
+            vertical-align: middle;
+        }
+
+        .student-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .student-table tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .id-badge {
+            font-family: monospace;
+            font-weight: 700;
+            color: var(--color-primary);
+            font-size: 0.8125rem;
+        }
+
+        .student-name {
+            font-weight: 700;
+            color: var(--color-text);
+        }
+
+        .grade-level-tag {
+            color: var(--color-text-muted);
+            font-weight: 500;
+        }
+
+        .subjects-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+            max-width: 280px;
+        }
+
+        .chip {
+            background-color: #f1f5f9;
+            color: var(--color-text);
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-family: monospace;
+            border: 1px solid #e2e8f0;
+        }
+
+        .badge-letter {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.75rem;
+        }
+
+        .grade-A { background-color: #d1fae5; color: #065f46; }
+        .grade-B { background-color: #dbeafe; color: #1e40af; }
+        .grade-C { background-color: #fef3c7; color: #92400e; }
+        .grade-D { background-color: #ffedd5; color: #9a3412; }
+        .grade-F { background-color: #fee2e2; color: #991b1b; }
+
+        .badge-status {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            border: 1px solid transparent;
+        }
+
+        .status-pass { background-color: var(--color-success-bg); color: #047857; border-color: #a7f3d0; }
+        .status-fail { background-color: var(--color-danger-bg); color: #b91c1c; border-color: #fecaca; }
+
+        .actions-cell {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.35rem;
+        }
+
+        .empty-state {
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .empty-icon {
+            font-size: 2.5rem;
+            color: var(--color-text-light);
+            margin-bottom: 1rem;
+        }
+
+        .empty-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 0.25rem;
+        }
+
+        .empty-desc {
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+        }
+
+        /* Modal Popup System */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background-color: var(--color-surface);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 550px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--color-border);
+            overflow: hidden;
+            transform: translateY(10px);
+            transition: transform 0.2s ease;
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 1rem 1.5rem;
+            background-color: #f8fafc;
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+
+        .modal-subtitle {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--color-border);
+            background-color: #f8fafc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--color-text-muted);
+            font-weight: 600;
+            margin-bottom: 0.35rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.6rem 0.85rem;
+            font-size: 0.875rem;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            background-color: #f8fafc;
+            color: var(--color-text);
+            transition: border-color var(--transition-fast), background-color var(--transition-fast);
+        }
+
+        .form-control:focus {
+            outline: none;
+            background-color: var(--color-surface);
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        /* ID Preview Box */
+        .id-preview-box {
+            background-color: var(--color-primary-light);
+            border: 1px solid #bfdbfe;
+            border-radius: var(--radius-md);
+            padding: 0.75rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .id-preview-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--color-text-muted);
+        }
+
+        .id-preview-value {
+            font-family: monospace;
+            font-weight: 700;
+            color: var(--color-primary);
+            font-size: 0.95rem;
+        }
+
+        /* Dynamic Grades Subject Entry Table/Rows */
+        .grades-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .grade-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            background-color: #f8fafc;
+            padding: 0.5rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--color-border);
+        }
+
+        .grade-row input[type="text"] {
+            flex: 1;
+        }
+
+        .grade-row input[type="number"] {
+            width: 90px;
+            text-align: center;
+        }
+
+        /* Object Inspector Container */
+        .object-code-preview {
+            background-color: #0f172a;
+            color: #f8fafc;
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            font-family: monospace;
+            font-size: 0.75rem;
+            white-space: pre-wrap;
+            word-break: break-all;
+            overflow-x: auto;
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 60;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .toast {
+            background-color: var(--color-text);
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-md);
+            font-size: 0.8125rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: var(--shadow-lg);
+            animation: slideIn 0.2s ease-out forwards;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Responsive Layout Overrides */
+        @media (max-width: 640px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .header-container {
+                padding: 0.875rem 1rem;
+            }
+            .main-container {
+                padding: 1.25rem 1rem;
+            }
+            .modal-footer {
+                flex-direction: column-reverse;
+                gap: 0.5rem;
+            }
+            .modal-footer .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="app-header">
+        <div class="header-container">
+            <div class="brand-section">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div>
+                    <h1 class="brand-title">GradeTracker</h1>
+                    <p class="brand-subtitle">Standard CSS & Plain Object Factory</p>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <button type="button" onclick="app.openModal('modal-form')" class="btn btn-primary">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Add Student</span>
+                </button>
+                <button type="button" onclick="app.resetDemoData()" title="Reset Sample Data" class="btn btn-secondary btn-icon-only">
+                    <i class="fa-solid fa-rotate-right"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+
+        <!-- Summary Statistics Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div>
+                    <div class="stat-label">Total Students</div>
+                    <div id="stat-total" class="stat-value">0</div>
+                </div>
+                <div class="stat-icon-wrapper stat-icon-blue">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div>
+                    <div class="stat-label">Class Average</div>
+                    <div id="stat-avg" class="stat-value">0%</div>
+                </div>
+                <div class="stat-icon-wrapper stat-icon-indigo">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div>
+                    <div class="stat-label">Pass Rate</div>
+                    <div id="stat-pass" class="stat-value">0%</div>
+                </div>
+                <div class="stat-icon-wrapper stat-icon-emerald">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Roster Table -->
+        <div id="students-container">
+            <!-- Dynamic student table rendered via JavaScript -->
+        </div>
+
+    </main>
+
+    <!-- Modal Form: Add Student & Assign Grades -->
+    <div id="modal-form" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div>
+                    <h3 class="modal-title">Add Student Record</h3>
+                    <p class="modal-subtitle">Auto-generated ID: b + Grade + 3-Last + 3-First</p>
+                </div>
+                <!-- Prominent Exit Button -->
+                <button type="button" onclick="app.closeModal('modal-form')" class="btn btn-danger-outline" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Exit Grade Entry</span>
+                </button>
+            </div>
+
+            <form id="student-form" onsubmit="app.handleFormSubmit(event)">
+                <div class="modal-body">
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="form-name">Full Name *</label>
+                            <input type="text" id="form-name" required placeholder="e.g. John Doe" class="form-control" oninput="app.updateLiveIdPreview()">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="form-grade-level">Grade / Class Level *</label>
+                            <input type="text" id="form-grade-level" required placeholder="e.g. 10" class="form-control" oninput="app.updateLiveIdPreview()">
+                        </div>
+                    </div>
+
+                    <!-- Auto-generated ID Display Box -->
+                    <div class="id-preview-box">
+                        <span class="id-preview-label">Calculated Student ID:</span>
+                        <span id="form-id-preview" class="id-preview-value">b---</span>
+                    </div>
+
+                    <!-- Subject Grades Entry Section -->
+                    <div class="form-group">
+                        <div class="grades-section-header">
+                            <label class="form-label" style="margin-bottom:0;">Subject Grades</label>
+                            <button type="button" onclick="app.addGradeInputRow()" class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">
+                                <i class="fa-solid fa-plus"></i>
+                                <span>Add Subject</span>
+                            </button>
+                        </div>
+
+                        <div id="grade-rows-container">
+                            <!-- Dynamic Grade Rows Injected Here -->
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" onclick="app.closeModal('modal-form')" class="btn btn-secondary">
+                        <i class="fa-solid fa-xmark"></i>
+                        <span>Cancel & Exit</span>
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        <span>Save Student Record</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Details: View Object Inspection -->
+    <div id="modal-details" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title">Student Object Inspector</h3>
+                <button type="button" onclick="app.closeModal('modal-details')" class="btn btn-secondary btn-icon-only">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="details-modal-content" class="modal-body">
+                <!-- Object inspection content rendered here -->
+            </div>
+            <div class="modal-footer" style="justify-content: flex-end;">
+                <button type="button" onclick="app.closeModal('modal-details')" class="btn btn-primary">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toasts Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script>
+        /* ==========================================================================
+           VANILLA JAVASCRIPT OBJECT LOGIC & MANAGEMENT CONTROLLER
+           ========================================================================== */
+
+        /**
+         * 1. ID GENERATOR LOGIC
+         * Formula: 'b' + gradeLevel + (3 letters of last name) + (3 letters of first name)
+         */
+        function generateStudentID(gradeLevel, fullName) {
+            const cleanGrade = String(gradeLevel || '').trim().toLowerCase().replace(/\s+/g, '');
+            const nameParts = String(fullName || '').trim().split(/\s+/).filter(Boolean);
+
+            let firstName = nameParts[0] || '';
+            let lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : firstName;
+
+            // Pad strings if shorter than 3 characters
+            const pad3 = (str) => (str + 'xxx').substring(0, 3).toLowerCase();
+
+            const last3 = pad3(lastName);
+            const first3 = pad3(firstName);
+
+            return `b${cleanGrade}${last3}${first3}`;
+        }
+
+        /**
+         * 2. JAVASCRIPT OBJECT FACTORY FUNCTION (NO ES6 CLASSES)
+         * Creates a plain JS object instance with properties and bound methods.
+         */
+        function createStudentObject(fullName, gradeLevel, grades) {
+            return {
+                fullName: fullName,
+                gradeLevel: gradeLevel,
+                id: generateStudentID(gradeLevel, fullName),
+                grades: grades || [], // Array of objects: { subject: string, score: number }
+
+                // Method: Calculates overall numerical average grade
+                getAverage: function() {
+                    if (!this.grades || this.grades.length === 0) return 0;
+                    const totalSum = this.grades.reduce((sum, item) => sum + (Number(item.score) || 0), 0);
+                    return totalSum / this.grades.length;
+                },
+
+                // Method: Returns computed letter grade based on average
+                getLetterGrade: function() {
+                    const avg = this.getAverage();
+                    if (avg >= 90) return 'A';
+                    if (avg >= 80) return 'B';
+                    if (avg >= 70) return 'C';
+                    if (avg >= 60) return 'D';
+                    return 'F';
+                },
+
+                // Method: Returns Pass/Fail status
+                getStatus: function() {
+                    return this.getAverage() >= 60 ? 'PASS' : 'FAIL';
+                }
+            };
+        }
+
+        /**
+         * 3. APPLICATION STATE & CONTROLLER
+         */
+        const app = {
+            students: [],
+            storageKey: 'gradetracker_plain_css_js_v1',
+
+            init: function() {
+                this.loadFromStorage();
+                if (this.students.length === 0) {
+                    this.loadDemoData();
+                }
+                this.render();
+            },
+
+            loadDemoData: function() {
+                // Populate sample student objects using the factory function
+                this.students = [
+                    createStudentObject('John Smith', '10', [
+                        { subject: 'Math', score: 88 },
+                        { subject: 'English', score: 92 },
+                        { subject: 'Physics', score: 84 }
+                    ]),
+                    createStudentObject('Emma Johnson', '11', [
+                        { subject: 'Biology', score: 95 },
+                        { subject: 'Chemistry', score: 89 },
+                        { subject: 'History', score: 91 }
+                    ]),
+                    createStudentObject('Michael Brown', '9', [
+                        { subject: 'Algebra', score: 55 },
+                        { subject: 'Art', score: 62 },
+                        { subject: 'English', score: 58 }
+                    ])
+                ];
+                this.saveToStorage();
+            },
+
+            resetDemoData: function() {
+                this.loadDemoData();
+                this.render();
+                this.showToast('Reset to default sample students');
+            },
+
+            saveToStorage: function() {
+                // Store raw state in LocalStorage (strip function references)
+                const plainArray = this.students.map(s => ({
+                    fullName: s.fullName,
+                    gradeLevel: s.gradeLevel,
+                    grades: s.grades
+                }));
+                localStorage.setItem(this.storageKey, JSON.stringify(plainArray));
+            },
+
+            loadFromStorage: function() {
+                try {
+                    const rawData = localStorage.getItem(this.storageKey);
+                    if (rawData) {
+                        const parsed = JSON.parse(rawData);
+                        // Reconstruct object instances using Factory Function
+                        this.students = parsed.map(item => 
+                            createStudentObject(item.fullName, item.gradeLevel, item.grades)
+                        );
+                    }
+                } catch (e) {
+                    this.students = [];
+                }
+            },
+
+            updateMetrics: function() {
+                const total = this.students.length;
+                document.getElementById('stat-total').textContent = total;
+
+                if (total === 0) {
+                    document.getElementById('stat-avg').textContent = '0%';
+                    document.getElementById('stat-pass').textContent = '0%';
+                    return;
+                }
+
+                const totalAverageSum = this.students.reduce((sum, s) => sum + s.getAverage(), 0);
+                const classAverage = (totalAverageSum / total).toFixed(1);
+                document.getElementById('stat-avg').textContent = `${classAverage}%`;
+
+                const passCount = this.students.filter(s => s.getStatus() === 'PASS').length;
+                const passPercentage = Math.round((passCount / total) * 100);
+                document.getElementById('stat-pass').textContent = `${passPercentage}%`;
+            },
+
+            render: function() {
+                this.updateMetrics();
+                const container = document.getElementById('students-container');
+
+                if (this.students.length === 0) {
+                    container.innerHTML = `
+                        <div class="table-wrapper">
+                            <div class="empty-state">
+                                <i class="fa-solid fa-folder-open empty-icon"></i>
+                                <h3 class="empty-title">No Student Records</h3>
+                                <p class="empty-desc">Click "Add Student" above to begin entering grades.</p>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                let html = `
+                    <div class="table-wrapper">
+                        <div class="table-responsive">
+                            <table class="student-table">
+                                <thead>
+                                    <tr>
+                                        <th>Generated ID</th>
+                                        <th>Full Name</th>
+                                        <th>Grade Level</th>
+                                        <th>Subject Grades</th>
+                                        <th>Average</th>
+                                        <th>Letter</th>
+                                        <th>Status</th>
+                                        <th style="text-align: right;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                `;
+
+                this.students.forEach((student, index) => {
+                    const avg = student.getAverage().toFixed(1);
+                    const letter = student.getLetterGrade();
+                    const status = student.getStatus();
+
+                    const subjectsList = student.grades.map(g => 
+                        `<span class="chip">${this.escapeHtml(g.subject)}: ${g.score}%</span>`
+                    ).join('');
+
+                    html += `
+                        <tr>
+                            <td class="id-badge">${this.escapeHtml(student.id)}</td>
+                            <td class="student-name">${this.escapeHtml(student.fullName)}</td>
+                            <td class="grade-level-tag">Grade ${this.escapeHtml(student.gradeLevel)}</td>
+                            <td><div class="subjects-chips">${subjectsList}</div></td>
+                            <td style="font-weight: 800; font-size: 0.95rem;">${avg}%</td>
+                            <td>
+                                <span class="badge-letter grade-${letter}">${letter}</span>
+                            </td>
+                            <td>
+                                <span class="badge-status ${status === 'PASS' ? 'status-pass' : 'status-fail'}">
+                                    ${status}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="actions-cell">
+                                    <button type="button" onclick="app.viewObjectDetails(${index})" title="Inspect Object" class="btn btn-secondary btn-icon-only">
+                                        <i class="fa-solid fa-code"></i>
+                                    </button>
+                                    <button type="button" onclick="app.deleteStudent(${index})" title="Delete Record" class="btn btn-secondary btn-icon-only" style="color: var(--color-danger);">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                html += `
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+
+                container.innerHTML = html;
+            },
+
+            openModal: function(modalId) {
+                if (modalId === 'modal-form') {
+                    document.getElementById('student-form').reset();
+                    document.getElementById('grade-rows-container').innerHTML = '';
+                    this.addGradeInputRow('Mathematics', 85);
+                    this.addGradeInputRow('English', 90);
+                    this.updateLiveIdPreview();
+                }
+                document.getElementById(modalId).classList.add('active');
+            },
+
+            closeModal: function(modalId) {
+                document.getElementById(modalId).classList.remove('active');
+            },
+
+            updateLiveIdPreview: function() {
+                const name = document.getElementById('form-name').value;
+                const grade = document.getElementById('form-grade-level').value;
+                const previewId = generateStudentID(grade, name);
+                document.getElementById('form-id-preview').textContent = previewId;
+            },
+
+            addGradeInputRow: function(subject = '', score = '') {
+                const container = document.getElementById('grade-rows-container');
+                const rowId = 'row_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
+
+                const rowHtml = `
+                    <div id="${rowId}" class="grade-row">
+                        <input type="text" placeholder="Subject Name" value="${this.escapeHtml(subject)}" required class="form-control subj-name">
+                        <input type="number" placeholder="Grade %" min="0" max="100" value="${score}" required class="form-control subj-score">
+                        <button type="button" onclick="app.removeGradeInputRow('${rowId}')" title="Remove Subject" class="btn btn-secondary btn-icon-only" style="border:none;">
+                            <i class="fa-solid fa-trash-can" style="color: var(--color-danger);"></i>
+                        </button>
+                    </div>
+                `;
+
+                container.insertAdjacentHTML('beforeend', rowHtml);
+            },
+
+            removeGradeInputRow: function(rowId) {
+                const container = document.getElementById('grade-rows-container');
+                if (container.children.length <= 1) {
+                    this.showToast('At least 1 subject is required', 'error');
+                    return;
+                }
+                const targetRow = document.getElementById(rowId);
+                if (targetRow) targetRow.remove();
+            },
+
+            handleFormSubmit: function(e) {
+                e.preventDefault();
+
+                const fullName = document.getElementById('form-name').value.trim();
+                const gradeLevel = document.getElementById('form-grade-level').value.trim();
+
+                const rowElements = document.querySelectorAll('#grade-rows-container .grade-row');
+                const grades = [];
+
+                rowElements.forEach(row => {
+                    const subjInput = row.querySelector('.subj-name');
+                    const scoreInput = row.querySelector('.subj-score');
+                    if (subjInput && scoreInput) {
+                        grades.push({
+                            subject: subjInput.value.trim(),
+                            score: parseFloat(scoreInput.value) || 0
+                        });
+                    }
+                });
+
+                if (grades.length === 0) {
+                    this.showToast('Please enter at least one subject grade.', 'error');
+                    return;
+                }
+
+                // Create new plain JS Object instance using factory function
+                const newStudent = createStudentObject(fullName, gradeLevel, grades);
+                this.students.push(newStudent);
+
+                this.saveToStorage();
+                this.render();
+                this.closeModal('modal-form');
+                this.showToast(`Saved ${newStudent.fullName} (${newStudent.id})`);
+            },
+
+            deleteStudent: function(index) {
+                const student = this.students[index];
+                if (student && confirm(`Delete record for ${student.fullName}?`)) {
+                    this.students.splice(index, 1);
+                    this.saveToStorage();
+                    this.render();
+                    this.showToast('Student record deleted');
+                }
+            },
+
+            viewObjectDetails: function(index) {
+                const student = this.students[index];
+                if (!student) return;
+
+                const content = document.getElementById('details-modal-content');
+                
+                content.innerHTML = `
+                    <div style="margin-bottom: 1rem;">
+                        <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--color-text-muted); font-weight: 700;">Plain Object Inspection</span>
+                        <div class="object-code-preview">
+// Plain Object (Factory Output)
+{
+  fullName: "${this.escapeHtml(student.fullName)}",
+  gradeLevel: "${this.escapeHtml(student.gradeLevel)}",
+  id: "${this.escapeHtml(student.id)}",
+  grades: ${JSON.stringify(student.grades, null, 2)},
+  getAverage: [Function: getAverage],
+  getLetterGrade: [Function: getLetterGrade],
+  getStatus: [Function: getStatus]
+}</div>
+                    </div>
+
+                    <div style="background-color: #f8fafc; border: 1px solid var(--color-border); padding: 1rem; border-radius: var(--radius-md);">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.875rem;">
+                            <span style="color: var(--color-text-muted);">Calculated Average:</span>
+                            <strong>${student.getAverage().toFixed(2)}%</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.875rem;">
+                            <span style="color: var(--color-text-muted);">Letter Grade:</span>
+                            <strong>${student.getLetterGrade()}</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.875rem;">
+                            <span style="color: var(--color-text-muted);">Status:</span>
+                            <strong>${student.getStatus()}</strong>
+                        </div>
+                    </div>
+                `;
+
+                this.openModal('modal-details');
+            },
+
+            showToast: function(msg, type = 'success') {
+                const container = document.getElementById('toast-container');
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                if (type === 'error') toast.style.backgroundColor = 'var(--color-danger)';
+                
+                toast.innerHTML = `<i class="fa-solid ${type === 'error' ? 'fa-circle-exclamation' : 'fa-circle-check'}"></i><span>${this.escapeHtml(msg)}</span>`;
+                container.appendChild(toast);
+                setTimeout(() => toast.remove(), 2500);
+            },
+
+            escapeHtml: function(str) {
+                if (!str) return '';
+                return String(str)
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            }
+        };
+
+        // Initialize application on page load
+        window.onload = function() {
+            app.init();
+        };
+    </script>
+</body>
+</html>
