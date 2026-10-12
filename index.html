@@ -6,11 +6,34 @@
     <title></title>
 </head>
 <body>
-    <form >
-        <input type="text" name="" id="fullName" placeholder="Full Name">
-        <input type="text" name="" id="grade" placeholder="Grade">
-        <button type="submit">Add Student</button>
-        
-    </form>
+    <main >
+        <h1>Student Record</h1>
+        <p class="sub">Fill in the details to create a student object.</p>
+        <div class="card">
+            <div id="form">
+                <div class="field">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" autocomplete="off" placeholder="Jane Marie Smith">
+                </div>
+                <div class="field">
+                    <label for="gradeLevel">Grade Level</label>
+                    <input type="text" id="gradeLevel" autocomplete="off" placeholder="10">
+                </div>
+                <div class="field">
+                    <label for="grades">Grades <span class="hint">(comma-separated)</span></label>
+                    <input type="text" id="grades" autocomplete="off" placeholder="85, 90, 78">
+                </div>
+                <p class="err" id="err" role="alert"></p>
+                <div class="actions">
+                    <button class="primary" id="create" type="button">Create Student</button>
+                    <button class="secondary" id="reset" type="button">Clear Form</button>
+                </div>
+            </div>
+        </div>
+        <div class="card hidden" id="result" aria-live="polite">
+            <dl id="out"></dl>
+            <pre id="json"></pre>
+        </div>
+    </main>
 </body>
 </html>

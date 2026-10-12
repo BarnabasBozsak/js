@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Student Record Form</title>
+<style>
+:root{--bg:#eef3f4;--card:#fff;--ink:#14272b;--muted:#5b7075;--line:#c8d6d9;--accent:#0f6b73;--accent-ink:#fff;--pass:#1b7a43;--fail:#b3261e;--code:#e3ecee}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1a1c;--card:#16272a;--ink:#e6f0f1;--muted:#93acb0;--line:#2c4549;--accent:#4fc3cc;--accent-ink:#06191b;--pass:#5fd08a;--fail:#ff8a80;--code:#0e1a1c}}
+:root[data-theme="dark"]{--bg:#0e1a1c;--card:#16272a;--ink:#e6f0f1;--muted:#93acb0;--line:#2c4549;--accent:#4fc3cc;--accent-ink:#06191b;--pass:#5fd08a;--fail:#ff8a80;--code:#0e1a1c}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",system-ui,-apple-system,Roboto,sans-serif;line-height:1.5}
+main{max-width:640px;margin:0 auto;padding:24px 16px 48px}
+h1{font-size:1.6rem;margin:0 0 4px}
+p.sub{margin:0 0 20px;color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px;margin-bottom:20px}
+label{display:block;font-weight:600;margin-bottom:4px}
+.hint{font-weight:400;color:var(--muted);font-size:.875rem}
+input{width:100%;padding:10px 12px;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px}
+input:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.field{margin-bottom:16px}
+.row{display:flex;gap:12px}.row .field{flex:1}
+.err{color:var(--fail);font-size:.9rem;margin:6px 0 0;min-height:1.2em}
+.actions{display:flex;gap:10px}
+button{font:inherit;font-weight:600;padding:10px 18px;border-radius:6px;cursor:pointer;border:1px solid var(--accent)}
+.primary{background:var(--accent);color:var(--accent-ink)}
+.secondary{background:transparent;color:var(--accent)}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 16px;margin:0}
+dt{color:var(--muted)}dd{margin:0;font-weight:600;overflow-wrap:anywhere}
+.Pass{color:var(--pass)}.Fail{color:var(--fail)}
+pre{margin:16px 0 0;padding:12px;background:var(--code);border-radius:6px;overflow-x:auto;font-size:.85rem}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<main>
+  <h1>Student record</h1>
+  <p class="sub">Fill in the details to create a student object.</p>
+
+  <div class="card">
+    <div id="form">
+      <div class="field">
+        <label for="fullName">Full name</label>
+        <input id="fullName" type="text" autocomplete="off" placeholder="Jane Marie Smith">
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="gradeLevel">Grade level</label>
+          <input id="gradeLevel" type="text" autocomplete="off" placeholder="9">
+        </div>
+      </div>
+      <div class="field">
+        <label for="grades">Grades <span class="hint">(separate with commas)</span></label>
+        <input id="grades" type="text" inputmode="decimal" autocomplete="off" placeholder="88, 92, 79.5, 95">
+      </div>
+      <p class="err" id="err" role="alert"></p>
+      <div class="actions">
+        <button class="primary" id="create" type="button">Create student</button>
+        <button class="secondary" id="reset" type="button">Clear form</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card hidden" id="result" aria-live="polite">
+    <dl id="out"></dl>
+    <pre id="json"></pre>
+  </div>
+</main>
+
+<script>
+function generateStudentID(gradeLevel, fullName) {
+  const cleanGrade = String(gradeLevel).trim().toUpperCase();
+  const nameParts = String(fullName).trim().split(" ");
+  let firstName = nameParts[0] || "";
+  let lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : "";
+  const pad3 = (str) => (str + "xxx").substring(0, 3).toLowerCase();
+  const last3 = pad3(lastName);
+  const first3 = pad3(firstName);
+  return `b${cleanGrade}${last3}${first3}`;
+}
+function getStudentObject(fullName, gradeLevel, grades) {
+  return {
+    fullName: fullName,
+    gradeLevel: gradeLevel,
+    ID: generateStudentID(gradeLevel, fullName),
+    grades: grades || [],
+    getAverage: function () {
+      if (this.grades.length === 0 || !this.grades) return 0;
+      const total = this.grades.reduce((sum, items) => sum + items, 0);
+      return total / this.grades.length;
+    },
+    getLetterGrade: function () {
+      const avg = this.getAverage();
+      if (avg >= 90) return "A";
+      else if (avg >= 80) return "B";
+      else if (avg >= 70) return "C";
+      else if (avg >= 60) return "D";
+      else return "F";
+    },
+    getStatus: function () {
+      return this.getAverage() >= 60 ? "Pass" : "Fail";
+    },
+  };
+}
+
+const $ = (id) => document.getElementById(id);
+let student = null; // the created object
+
+function create() {
+  const name = $("fullName").value.trim();
+  const grade = $("gradeLevel").value.trim();
+  const raw = $("grades").value.trim();
+  const err = $("err");
+  err.textContent = "";
+
+  if (!name) { err.textContent = "Enter the student's full name."; return; }
+  if (!grade) { err.textContent = "Enter a grade level."; return; }
+
+  const grades = raw ? raw.split(",").map((s) => s.trim()).filter(Boolean).map(Number) : [];
+  if (grades.some((n) => Number.isNaN(n))) { err.textContent = "Grades must be numbers separated by commas."; return; }
+
+  student = getStudentObject(name, grade, grades);
+  show(student);
+}
+
+function show(s) {
+  const status = s.getStatus();
+  $("out").innerHTML = "";
+  const rows = [
+    ["Name", s.fullName],
+    ["Grade level", s.gradeLevel],
+    ["Student ID", s.ID],
+    ["Grades", s.grades.length ? s.grades.join(", ") : "none"],
+    ["Average", s.getAverage().toFixed(2)],
+    ["Letter grade", s.getLetterGrade()],
+    ["Status", status],
+  ];
+  rows.forEach(([k, v]) => {
+    const dt = document.createElement("dt"); dt.textContent = k;
+    const dd = document.createElement("dd"); dd.textContent = v;
+    if (k === "Status") dd.className = status;
+    $("out").append(dt, dd);
+  });
+  $("json").textContent = JSON.stringify(s, null, 2);
+  $("result").classList.remove("hidden");
+}
+
+$("create").addEventListener("click", create);
+$("reset").addEventListener("click", () => {
+  ["fullName", "gradeLevel", "grades"].forEach((id) => ($(id).value = ""));
+  $("err").textContent = "";
+  $("result").classList.add("hidden");
+  student = null;
+});
+["fullName", "gradeLevel", "grades"].forEach((id) =>
+  $(id).addEventListener("keydown", (e) => { if (e.key === "Enter") create(); })
+);
+</script>
+</body>
+</html>
