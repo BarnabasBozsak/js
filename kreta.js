@@ -31,7 +31,36 @@ function getStudentObject(gradeLevel, fullName, grades) {
     },
   };
 }
-
+function getClassObject()
+{
+  return {
+    students: [],
+    addstudent: function (student)
+     {
+      this.students.push(student);
+     },
+     removestudent: function (index)
+     {
+      this.students.splice(index,1);
+     },
+     getclassAverage: function()
+     {
+      const graded = this.students.filter((s) => s.grades.length > 0);
+      if(graded.length === 0) return 0;
+      const total = graded.reduce((sum,s) => sum + s.getAverage(), 0)
+      return total / graded.length;
+     },
+     getclassLetterGrade: function ()
+     {
+      const avg = this.getclassAverage();
+      if(avg >= 90) return "A";
+      else if(avg >= 80) return "B";
+      else if(avg >= 70) return "C";
+      else if(avg >= 60) return "D";
+      else return "F";
+    },
+  };
+}
 const $ = (id) => document.getElementById(id);
 let student = null;
 
@@ -64,6 +93,7 @@ function create() {
   }
   student = getStudentObject(grade, name, grades);
   show(student);
+  const duplicate = classroom.students.some((s) => s.ID === student.ID)
 }
 
 function show(s) {
