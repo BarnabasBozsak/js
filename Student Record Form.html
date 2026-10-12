@@ -73,8 +73,8 @@ pre{margin:16px 0 0;padding:12px;background:var(--code);border-radius:6px;overfl
 function generateStudentID(gradeLevel, fullName) {
   const cleanGrade = String(gradeLevel).trim().toUpperCase();
   const nameParts = String(fullName).trim().split(" ");
-  let firstName = nameParts[0] || "";
-  let lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : "";
+  let lastName = nameParts[0] || "";
+  let firstName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : "";
   const pad3 = (str) => (str + "xxx").substring(0, 3).toLowerCase();
   const last3 = pad3(lastName);
   const first3 = pad3(firstName);
