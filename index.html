@@ -1,39 +1,62 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title></title>
-</head>
-<body>
-    <main >
-        <h1>Student Record</h1>
-        <p class="sub">Fill in the details to create a student object.</p>
-        <div class="card">
-            <div id="form">
-                <div class="field">
-                    <label for="fullName">Full Name</label>
-                    <input type="text" id="fullName" autocomplete="off" placeholder="Jane Marie Smith">
-                </div>
-                <div class="field">
-                    <label for="gradeLevel">Grade Level</label>
-                    <input type="text" id="gradeLevel" autocomplete="off" placeholder="10">
-                </div>
-                <div class="field">
-                    <label for="grades">Grades <span class="hint">(comma-separated)</span></label>
-                    <input type="text" id="grades" autocomplete="off" placeholder="85, 90, 78">
-                </div>
-                <p class="err" id="err" role="alert"></p>
-                <div class="actions">
-                    <button class="primary" id="create" type="button">Create Student</button>
-                    <button class="secondary" id="reset" type="button">Clear Form</button>
-                </div>
-            </div>
+    <link rel="stylesheet" href="style.css" />
+    <script src="kreta.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <h1>Student Record</h1>
+      <p class="sub">Fill in the details to create a student object.</p>
+      <div class="card">
+        <div id="form">
+          <div class="field">
+            <label for="fullName">Full Name</label>
+            <input
+              type="text"
+              id="fullName"
+              autocomplete="off"
+              placeholder="Jane Marie Smith"
+            />
+          </div>
+          <div class="field">
+            <label for="gradeLevel">Grade Level</label>
+            <input
+              type="text"
+              id="gradeLevel"
+              autocomplete="off"
+              placeholder="10"
+            />
+          </div>
+          <div class="field">
+            <label for="grades"
+              >Grades <span class="hint">(comma-separated)</span></label
+            >
+            <input
+              type="text"
+              id="grades"
+              autocomplete="off"
+              placeholder="85, 90, 78"
+            />
+          </div>
+          <p class="err" id="err" role="alert"></p>
+          <div class="actions">
+            <button class="primary" id="create" type="button">
+              Create Student
+            </button>
+            <button class="secondary" id="reset" type="button">
+              Clear Form
+            </button>
+          </div>
         </div>
-        <div class="card hidden" id="result" aria-live="polite">
-            <dl id="out"></dl>
-            <pre id="json"></pre>
-        </div>
+      </div>
+      <div class="card hidden" id="result" aria-live="polite">
+        <dl id="out"></dl>
+        <pre id="json"></pre>
+      </div>
     </main>
-</body>
+  </body>
 </html>
