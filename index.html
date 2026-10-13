@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title></title>
+    <title>Student Records</title>
     <link rel="stylesheet" href="style.css" />
     <script src="kreta.js" defer></script>
   </head>
@@ -56,6 +56,31 @@
       <div class="card hidden" id="result" aria-live="polite">
         <dl id="out"></dl>
         <pre id="json"></pre>
+      </div>
+      <div class="card hidden" id="stats">
+        <h2>Class Statistics</h2>
+        <dl id="statsOut"></dl>
+        <h3>Letter grade distribution</h3>
+        <div id="dist"></div>
+      </div>
+      <div class="card hidden" id="roster">
+        <h2>Students</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Grade</th>
+                <th>Avg</th>
+                <th>Letter</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="rosterBody"></tbody>
+          </table>
+        </div>
       </div>
     </main>
   </body>
