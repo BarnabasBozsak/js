@@ -1,6 +1,6 @@
 function generateStudentID(gradeLevel, fullName) {
   const cleanGrade = String(gradeLevel).trim().toUpperCase();
-  const nameParts = String(fullName).trim().split(/\s+/);
+  const nameParts = String(fullName).trim().split(" ");
   const firstName = nameParts[0] || "";
   const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : "";
   const pad3 = (str) => (str + "xxx").substring(0, 3).toLowerCase();
