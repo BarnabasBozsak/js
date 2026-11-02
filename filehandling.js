@@ -1,4 +1,5 @@
 import fs from "fs";
+import { json } from "stream/consumers";
 const path = "szoveg.txt";
 let content = "";
 try
@@ -18,3 +19,18 @@ catch(error)
     console.log(`Error: ${error}`);
 }
 console.log(path);
+try{
+    content = fs.readFileSync("adatok.json","utf-8")
+    console.log(content);
+    const adatok = JSON.parse(content);
+    console.log(adatok)
+    console.log(typeof adatok)
+    adatok.episode = 4
+    console.log(adatok)
+    content = JSON.stringify(adatok, null, 2)
+    fs.writeFileSync("adatok.json",content,"utf-8")
+}
+catch(error)
+{
+    console.log(`Error: ${error}`);
+}
