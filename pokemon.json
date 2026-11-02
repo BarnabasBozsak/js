@@ -1,0 +1,142 @@
+[
+  {
+    "id": "1",
+    "name": "Bulbasaur",
+    "type": "Grass",
+    "level": "5",
+    "hp": "45"
+  },
+  {
+    "id": "2",
+    "name": "Ivysaur",
+    "type": "Grass",
+    "level": "16",
+    "hp": "60"
+  },
+  {
+    "id": "3",
+    "name": "Venusaur",
+    "type": "Grass",
+    "level": "32",
+    "hp": "80"
+  },
+  {
+    "id": "4",
+    "name": "Charmander",
+    "type": "Fire",
+    "level": "5",
+    "hp": "39"
+  },
+  {
+    "id": "5",
+    "name": "Charmeleon",
+    "type": "Fire",
+    "level": "16",
+    "hp": "58"
+  },
+  {
+    "id": "6",
+    "name": "Charizard",
+    "type": "Fire",
+    "level": "36",
+    "hp": "78"
+  },
+  {
+    "id": "7",
+    "name": "Squirtle",
+    "type": "Water",
+    "level": "5",
+    "hp": "44"
+  },
+  {
+    "id": "8",
+    "name": "Wartortle",
+    "type": "Water",
+    "level": "16",
+    "hp": "59"
+  },
+  {
+    "id": "9",
+    "name": "Blastoise",
+    "type": "Water",
+    "level": "36",
+    "hp": "79"
+  },
+  {
+    "id": "10",
+    "name": "Caterpie",
+    "type": "Bug",
+    "level": "3",
+    "hp": "45"
+  },
+  {
+    "id": "11",
+    "name": "Metapod",
+    "type": "Bug",
+    "level": "7",
+    "hp": "50"
+  },
+  {
+    "id": "12",
+    "name": "Butterfree",
+    "type": "Bug",
+    "level": "12",
+    "hp": "60"
+  },
+  {
+    "id": "13",
+    "name": "Weedle",
+    "type": "Bug",
+    "level": "3",
+    "hp": "40"
+  },
+  {
+    "id": "14",
+    "name": "Kakuna",
+    "type": "Bug",
+    "level": "7",
+    "hp": "45"
+  },
+  {
+    "id": "15",
+    "name": "Beedrill",
+    "type": "Bug",
+    "level": "12",
+    "hp": "65"
+  },
+  {
+    "id": "16",
+    "name": "Pidgey",
+    "type": "Flying",
+    "level": "4",
+    "hp": "40"
+  },
+  {
+    "id": "17",
+    "name": "Pidgeotto",
+    "type": "Flying",
+    "level": "18",
+    "hp": "63"
+  },
+  {
+    "id": "18",
+    "name": "Pidgeot",
+    "type": "Flying",
+    "level": "36",
+    "hp": "83"
+  },
+  {
+    "id": "19",
+    "name": "Rattata",
+    "type": "Normal",
+    "level": "4",
+    "hp": "30"
+  },
+  {
+    "id": "20",
+    "name": "Raticate",
+    "type": "Normal",
+    "level": "20",
+    "hp": "55"
+  }
+]
