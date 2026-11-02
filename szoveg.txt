@@ -1,0 +1,10 @@
+File -> Preferences 
+Settings
+interminal -> set run in terminal
+format -> set format on save and set formatter top Prettier
+
+ Új sorok hozzáadva 
+ A teszt kedvéért
+
+ Új sorok hozzáadva 
+ A teszt kedvéért
