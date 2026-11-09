@@ -30,21 +30,39 @@ console.log(
     : "Az auto nem átlépte a sebbességhatárt",
 );
 console.log(`4. feladat`);
-let all = [0,adatok[0][0]]
-let stop = 0
-for(const row of adatok)
-{
-    if(row[2] == 0)
-    {
-        stop = row[1]
+let all = [0, adatok[0][0]];
+let stop = 0;
+for (const row of adatok) {
+  if (row[2] == 0) {
+    stop = row[1];
+  }
+  if (row[2] > 0 && stop != 0) {
+    if (row[0] - stop > all[1] - all[0]) {
+      all = [stop, row[0]];
     }
-    if(row[2] > 0 && stop != 0)
-    {
-        if(row[0] - stop > all[1] - all[0])
-        {
-            all = [stop, row[0]]
-        }
-        stop = 0
-    }
+    stop = 0;
+  }
 }
-console.log(`A leghosszabb állásidő ${all[0]} és ${all[1]} másodperc között volt.`)
+console.log(
+  `A leghosszabb állásidő ${all[0]} és ${all[1]} másodperc között volt.`,
+);
+console.log(`5. feladat`);
+const idopont = +(await input("Mikor vizsgáljuk az autó sebességét? "));
+let seb = 0;
+let elozo = 0;
+for (const row of adatok) {
+  if (row[0] <= idopont && idopont <= row[1]) {
+    let [t1, t2, v2] = row;
+    let v1 = elozo;
+    seb = v1 + ((v2 - v1) / (t2 - t1)) * (idopont - t1);
+    break;
+  }
+  if (idopont <= row[0]) {
+    seb = elozo;
+    break;
+  }
+  elozo = row[2];
+}
+console.log(`Az autó sebessége a(z) ${idopont}. masodpercben ${seb} m/s volt. 
+`);
+console.log("6.feladat");
