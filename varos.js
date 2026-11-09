@@ -40,11 +40,11 @@ for(const row of adatok)
     }
     if(row[2] > 0 && stop != 0)
     {
-        if(row[1] - stop > all[1] - all[0])
+        if(row[0] - stop > all[1] - all[0])
         {
             all = [stop, row[0]]
         }
         stop = 0
     }
 }
-console.log(`A leghosszabb állásidő ${all[0]}<852> és ${all[1]}<948> másodperc között volt.`)
+console.log(`A leghosszabb állásidő ${all[0]} és ${all[1]} másodperc között volt.`)
