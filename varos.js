@@ -78,3 +78,13 @@ for(let row of adatok)
   t = t2
 }
 console.log(`A megtett út ${ut} méter`);
+console.log("7. feladat")
+v1 = 0
+const path = `v${rendszam}.txt`
+fs.writeFileSync(path,``,"utf-8")
+for(let row of adatok)
+{
+  fs.appendFileSync(path,`${row[0]}\t${v1} \n`,"utf-8")
+  fs.appendFileSync(path,`${row[1]}\t${row[2]} \n`,"utf-8")
+  v1 = row[2]
+}
