@@ -66,3 +66,15 @@ for (const row of adatok) {
 console.log(`Az autó sebessége a(z) ${idopont}. masodpercben ${seb} m/s volt. 
 `);
 console.log("6.feladat");
+let ut = 0
+let v1 = 0
+let t = 0
+for(let row of adatok)
+{
+  let [t1,t2,v2] = row
+  ut += v1 * (t1-t)
+  ut += (v1 + v2) / 2 * (t2 - t1)
+  v1 = v2
+  t = t2
+}
+console.log(`A megtett út ${ut} méter`);
